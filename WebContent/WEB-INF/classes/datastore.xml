@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datastore-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
+	<!-- Database connection configuration -->
+	
+	<!-- aws dev server -->
+	<database>
+		<url>jdbc:sqlserver://localhost:14330;databaseName=b2b;user=sa;password=C0mmander</url>
+		<username>sa</username>
+		<password>C0mmander</password>
+	</database>
+	
+	<eap_database>
+	    <url>jdbc:sqlserver://localhost:14330;databaseName=TMISDB2;user=sa;password=C0mmander</url>
+		<username>sa</username>
+		<password>C0mmander</password>
+	</eap_database>
+	
+	<!-- Authentication configuration -->
+	<authentication scheme="HTTP_MAC">
+		<endpoints>
+			<endpoint type="authorization">/auth/</endpoint>
+			<endpoint type="introspection">/token/verify/</endpoint>
+			<endpoint type="revocation">/token/revoke/</endpoint>
+		</endpoints>
+		<oauth>
+			<client id="YpcZjUa1GZGan1QX" secret="nsGtxKpmrlVYpfvoYY3FCBXg4hVT3NpJjAlLGUzHl7QPC1vgynF6j1sarnRPr1wit5VueM1AMiUGhDYSopwYDAYfBwpzWCU1zyhDmLIaI7J2OBgtsPLUjCqZcQ8wnQOv"></client>
+			<scope>readonly forget_password reset_password</scope>
+		</oauth>
+		<token algorithm="hmac-sha-256">
+			<encryption>
+				<path>/WEB-INF/classes/public_key.der</path>
+			</encryption>
+			<decryption>
+				<path>/WEB-INF/classes/private_key.der</path>
+			</decryption>
+			<issuer>esquel.cn</issuer>
+		</token>
+	</authentication>
+	
+	<!-- Authorization configuration -->
+	<credentials>
+		<user type="com.esquel.b2b.schema.User">
+			<resource protected="false">
+				<class>com.esquel.b2b.resource.UserServerResource</class>
+				<uri trailing-slash-optional="true" identity="username">/users/</uri>
+				<actions>
+					<action name="reset_password" class="com.joyaether.datastore.security.CredentialSecretServerResource" identity="username" />
+					<action name="forget_password" class="com.esquel.b2b.resource.ForgetPasswordServerResource" identity="username" />
+				</actions>
+			</resource>
+		</user>
+	</credentials>
+	
+	<!-- Logging configuration -->
+	<logging enabled="true">
+		<!--
+		<resource>
+			<uri trailing-slash-optional="true" identity="log_id">/logs/</uri>
+		</resource>
+		-->
+	</logging>
+	
+	<!-- Metadata endpoints -->
+	<!--
+	<metadata>
+		<manifest>
+			<resource>
+				<uri trailing-slash-optional="true" identity="name">/manifests/</uri>
+			</resource>
+		</manifest>
+		<operation>
+			<resource>
+				<uri trailing-slash-optional="true" identity="operation_id">/operations/</uri>
+			</resource>
+		</operation>
+	</metadata>
+	-->
+	
+	<!-- Application services configurations -->
+	<services>
+		<task pool-size="10" />
+		<mail protocol="smtp" host="smtp.office365.com" port="587" username="testing@esquel.com" password="P@ssw0rd" transport="SMTP_TLS" />
+	</services>
+	
+	<!-- Resource endpoints -->
+	<resources> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CompanyServerResource</class>
+ 			<uri identity="company_id" trailing-slash-optional="true">/companies/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CompanyFolderServerResource</class>
+ 			<uri identity="company_folder_id" trailing-slash-optional="true">/company_folders/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CompanyFileServerResource</class>
+ 			<uri identity="company_file_id" trailing-slash-optional="true">/company_files/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CompanyLanguageServerResource</class>
+ 			<uri identity="company_language_id" trailing-slash-optional="true">/company_languages/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CompanyVariableServerResource</class>
+ 			<uri identity="company_variable_id" trailing-slash-optional="true">/company_variables/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CompanyVariableCategoryServerResource</class>
+ 			<uri identity="compary_variable_category_id" trailing-slash-optional="true">/company_variable_categories/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.MasterContentServerResource</class>
+ 			<uri identity="master_content_id" trailing-slash-optional="true">/master_contents/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.MessageTypeServerResource</class>
+ 			<uri identity="message_type_id" trailing-slash-optional="true">/message_types/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.OrderServerResource</class>
+ 			<uri identity="order_id" trailing-slash-optional="true">/orders/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.OrderItemServerResource</class>
+ 			<uri identity="order_item_id" trailing-slash-optional="true">/order_items/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CopyOrderItemServerResource</class>
+ 			<uri trailing-slash-optional="true">/order_items/{order_id}/copy/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ImportOrderItemServerResource</class>
+ 			<uri trailing-slash-optional="true">/order_items/{order_id}/import/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.OrderItemAttachmentServerResource</class>
+ 			<uri identity="order_item_attachment_id" trailing-slash-optional="true">/order_item_attachments/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.OrderItemSubProductServerResource</class>
+ 			<uri identity="order_item_sub_product_id" trailing-slash-optional="true">/order_item_sub_products/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.OrderMessageServerResource</class>
+ 			<uri identity="message_id" trailing-slash-optional="true">/order_messages/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductServerResource</class>
+ 			<uri identity="product_id" trailing-slash-optional="true">/products/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductLinkFileServerResource</class>
+ 			<uri identity="product_link_id" trailing-slash-optional="true">/product_link_files/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductTagServerResource</class>
+ 			<uri identity="tag_id" trailing-slash-optional="true">/product_tags/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductTagContentValueServerResource</class>
+ 			<uri identity="tag_reference_id" trailing-slash-optional="true">/product_tag_content_values/</uri>
+ 		</resource>  
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductTagDetailServerResource</class>
+ 			<uri identity="tag_detail_id" trailing-slash-optional="true">/product_tag_details/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductTemplateServerResource</class>
+ 			<uri identity="template_id" trailing-slash-optional="true">/product_templates/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.SignUpRequestServerResource</class>
+ 			<uri identity="username" trailing-slash-optional="true">/sign_up/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.SubProductServerResource</class>
+ 			<uri trailing-slash-optional="true">/sub_products/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.SubProductValueServerResource</class>
+ 			<uri trailing-slash-optional="true">/sub_product_values/</uri>
+ 		</resource>
+ 		<resource protected="false">
+ 		    <class>com.esquel.b2b.resource.BrandServerResource</class>
+ 			<uri identity="brand_id" trailing-slash-optional="true">/brands/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.BrandVendorServerResource</class>
+ 			<uri trailing-slash-optional="true">/brand_vendors/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductInfoServerResource</class>
+ 			<uri trailing-slash-optional="true">/brand_products/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.VendorBrandServerResource</class>
+ 			<uri identity="brand_customer_id" railing-slash-optional="true">/vendor_brands/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ContentServerResource</class>
+ 			<uri identity="path" variable-match-type="all" railing-slash-optional="true">/contents/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.BrandCustomerServerResource</class>
+ 			<uri identity="brand_customer_id" trailing-slash-optional="true">/brand_customers/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.SubBrandServerResource</class>
+ 			<uri identity="sub_brand_id" trailing-slash-optional="true">/sub_brands/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.SubBrandContactServerResource</class>
+ 			<uri identity="sub_brand_contact_id" trailing-slash-optional="true">/sub_brand_contacts/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CustomerServerResource</class>
+ 			<uri identity="customer_id" trailing-slash-optional="true">/customers/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CompanyListServerResource</class>
+ 			<uri identity="company_id" trailing-slash-optional="true">/company_list/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.SaleServerResource</class>
+ 			<uri identity="sales_id" trailing-slash-optional="true">/sales/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.SalesTeamServerResource</class>
+ 			<uri identity="sales_team_id" trailing-slash-optional="true">/sales_teams/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ImportCustomersServerResource</class>
+ 			<uri trailing-slash-optional="true">/eap_customers/import/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ImportSubBrandsServerResource</class>
+ 			<uri trailing-slash-optional="true">/eap_sub_brands/import/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CurrencyServerResource</class>
+ 			<uri identity="customer_id" trailing-slash-optional="true">/currencies/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.SeasonServerResource</class>
+ 			<uri identity="customer_id" trailing-slash-optional="true">/seasons/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.PaymentTermServerResource</class>
+ 			<uri identity="customer_id" trailing-slash-optional="true">/payment_terms/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductVariantServerResource</class>
+ 			<uri identity="eap_code" trailing-slash-optional="true">/product_variants/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductVariantValueServerResource</class>
+ 			<uri trailing-slash-optional="true">/product_variant_values/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.BrandInfoServerResource</class>
+ 			<uri trailing-slash-optional="true">/brand_infos/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.BrandRegionalContactServerResource</class>
+ 			<uri trailing-slash-optional="true">/brand_regional_contacts/</uri>
+ 		</resource> 
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CustomerAddressServerResource</class>
+ 			<uri trailing-slash-optional="true">/customer_addresses/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CustomerPaymentServerResource</class>
+ 			<uri trailing-slash-optional="true">/customer_payments/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.CustomerProductServerResource</class>
+ 			<uri identity="customer" trailing-slash-optional="true">/eap_vendor_products/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductInfoServerResource</class>
+ 			<uri trailing-slash-optional="true">/product_infos/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductSubCodeInfoServerResource</class>
+ 			<uri trailing-slash-optional="true">/eap_brand_products/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.BulkOrderServerResource</class>
+ 			<uri identity="bulk_order_id" trailing-slash-optional="true">/eapmis_bulkorders/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.UnitDetailServerResource</class>
+ 			<uri identity="unit_detail_id" trailing-slash-optional="true">/unit_details/</uri>
+ 		</resource>
+ 		<resource protected="false"> 
+ 			<class>com.esquel.b2b.resource.ProductImageServerResource</class>
+ 			<uri identity="product_image_id" trailing-slash-optional="true">/product_images/</uri>
+ 		</resource>
+ 	</resources> 
+</datastore-app>

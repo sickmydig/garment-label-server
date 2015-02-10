@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="b2b" version="3.0">
+  <display-name>Esquel B2B</display-name>
+  <context-param>
+    <param-name>org.restlet.application</param-name>
+    <param-value>com.esquel.b2b.DatastoreApplication</param-value>
+  </context-param>
+  <context-param>
+    <param-name>org.restlet.clients</param-name>
+    <param-value>HTTP HTTPS</param-value>
+  </context-param>
+  <context-param>
+    <param-name>com.joyaether.datastore.content.path</param-name>
+    <param-value>file:///C:\ProgramData\Tomcat\B2B</param-value>
+<!-- 	<param-value>file:///Users/lam.stanley/Downloads/B2B</param-value> -->
+  </context-param>
+  <context-param>
+    <param-name>com.joyaether.datastore.content.url</param-name>
+    <param-value>http://54.169.149.15/garment-label/api/contents/</param-value>
+	<!-- <param-value>http://localhost:8080/b2b/api/contents/</param-value> -->
+  </context-param>
+  <servlet>
+    <servlet-name>RestletServlet</servlet-name>
+    <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RestletServlet</servlet-name>
+    <url-pattern>/api/*</url-pattern>
+  </servlet-mapping>
+  <listener>
+    <listener-class>com.esquel.b2b.B2BApplicationServletContextListener</listener-class>
+  </listener>
+</web-app>
