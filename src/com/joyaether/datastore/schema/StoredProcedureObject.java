@@ -57,7 +57,7 @@ public abstract class StoredProcedureObject<T, ID> {
 	 * 
 	 * @param params an object containing parameters to the stored procedure
 	 * @param dao the {@link Dao} object to access the database
-	 * @return the result set as a result of executing the given stored procedure
+	 * @return the result set as a result of executing the given stored procedure.
 	 * @throws SQLException thrown if there was error executing the stored procedure
 	 */
 	public static <T, ID> List<T> fetch(StoredProcedureParameters params, Dao<T, ID> dao) throws SQLException {
